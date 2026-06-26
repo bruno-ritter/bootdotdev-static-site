@@ -1,6 +1,6 @@
 from enum import Enum
 
-from htmlnode import LeafNode
+from src.htmlnode import LeafNode
 
 
 class TextType(Enum):
@@ -56,4 +56,4 @@ def text_node_to_html_node(text_node: TextNode):
                 props={"src": text_node.url, "alt": text_node.text},
             )
         case _:
-            ValueError(f"invalid text type: {text_node.text_type}")
+            raise ValueError(f"invalid text type: {text_node.text_type}")
