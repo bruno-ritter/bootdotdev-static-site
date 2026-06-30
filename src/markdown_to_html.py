@@ -1,7 +1,7 @@
-from src.htmlnode import HTMLNode, ParentNode
-from src.inline_markdown import text_to_textnodes
-from src.markdown_blocks import BlockType, block_to_block_type, markdown_to_blocks
-from src.textnode import TextNode, TextType, text_node_to_html_node
+from htmlnode import HTMLNode, ParentNode
+from inline_markdown import text_to_textnodes
+from markdown_blocks import BlockType, block_to_block_type, markdown_to_blocks
+from textnode import TextNode, TextType, text_node_to_html_node
 
 
 def markdown_to_html_node(markdown: str) -> ParentNode:
@@ -43,6 +43,15 @@ def markdown_to_html_node(markdown: str) -> ParentNode:
                     li_nodes.append(ParentNode("li", item_children))
                 list_node = ParentNode("ol", li_nodes)
                 html.append(list_node)
+            case BlockType.QUOTE:
+                lines = block.split("\n")
+                cleaned = []
+                for line in lines:
+                    cleaned.append(line.lstrip(">").strip())
+                text = " ".join(cleaned)
+                quote_children = text_to_children(text)
+                quote_node = ParentNode("blockquote", quote_children)
+                html.append(quote_node)
             case _:
                 raise ValueError("Invalid block type")
 
@@ -72,4 +81,14 @@ def markdown_to_html_headings(block: str) -> str:
         return "h2"
     if block.startswith("# "):
         return "h1"
+    return ""
+
+
+def extract_title(markdown: str) -> str:
+    blocks: list[str] = markdown_to_blocks(markdown)
+    for block in blocks:
+        if markdown_to_html_headings(block) == "h1":
+            return block[2:]
+        else:
+            raise Exception
     return ""

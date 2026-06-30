@@ -1,6 +1,6 @@
 import unittest
 
-from src.markdown_to_html import markdown_to_html_node
+from markdown_to_html import extract_title, markdown_to_html_node
 
 
 class TestMarkdownToHTML(unittest.TestCase):
@@ -88,6 +88,16 @@ This is another paragraph with _italic_ text and `code` here
             html,
             "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
         )
+
+    def test_extract_title(self):
+        md = """
+# Tolkien Fan Club
+
+![JRR Tolkien sitting](/images/tolkien.png)
+
+Here's the deal, **I like Tolkien**.
+"""
+        self.assertEqual(extract_title(md), "Tolkien Fan Club")
 
 
 if __name__ == "__main__":

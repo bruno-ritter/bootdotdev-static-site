@@ -1,6 +1,6 @@
 import unittest
 
-from src.inline_markdown import (
+from inline_markdown import (
     extract_markdown_images,
     extract_markdown_links,
     split_nodes_delimiter,
